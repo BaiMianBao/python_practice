@@ -1,0 +1,24 @@
+#/usr/local/bin/python
+
+# We're going to figure out how many trailing zeroes there
+# are in n!
+
+n = 10
+
+def count_zeroes(n):
+  # we're going to get a zero for every 5 to start off
+  number_of_trailing_zeroes = n / 5
+
+  # now we need to add a zero for every power of ten of n,
+  # but recursively.  I.e. two for 100, three for 1000.
+  # I'm pretty sure.  
+
+  number_of_power_10_zeroes = counter = log(n)
+  # need to do number of powers of 10 - 1 because we're already accounting
+  # for the first one with the 5 count, like King Kong Bundy
+  
+  while counter > 1 do:
+    number_of_power_10_zeroes = number_of_power_10_zeroes + counter
+    counter -= 1
+    
+    
