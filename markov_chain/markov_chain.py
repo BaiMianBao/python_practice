@@ -30,3 +30,38 @@ class Student:
 		self.attend = 0
 		self.grades = []
 
+	def addGrade(self, grade):
+		self.grades.append(grade)
+
+class Model:
+	def __init__(self, wordList):
+		self.wordList = wordList
+		
+	def printList(self, wordList):
+		print wordList
+
+model1 = Model(["apple","ape","ample"])
+print model1.wordList
+
+# char_couplets is the dictionary where we'll be storing the 
+# pairs of characters and the number of times they appear.  
+# using this we'll be able to calculate the probability of one
+# char following another.
+char_couplets = {}
+
+# let's iterate through the words and 
+# collect the characters in doubles
+for word in model1.wordList:
+	print word
+	i = 0
+	while i < (len(word)-1):
+		char_couple = word[i:i+2]
+		print char_couple
+		if char_couple in char_couplets:
+			char_couplets[char_couple] += 1
+		else:
+			char_couplets[char_couple] = 1
+		i += 1
+	
+		
+print char_couplets
