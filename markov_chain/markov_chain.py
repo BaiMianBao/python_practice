@@ -49,19 +49,49 @@ print model1.wordList
 # char following another.
 char_couplets = {}
 
+# char_starts is the dict where we keep track of all of the 
+# letters which are followed by another letter
+char_starts = {}
+
 # let's iterate through the words and 
 # collect the characters in doubles
+
+# let's also collect all of the starts 
+# of the couplets to keep track of the 
+# denominator for our probabilities later.
+# It's nicer to do it in the same loop.
+
 for word in model1.wordList:
 	print word
+	# i = number of char couples
 	i = 0
+	# j = number of starting letters
+	j = 0
 	while i < (len(word)-1):
+		char_start = word[i:i+1]
 		char_couple = word[i:i+2]
 		print char_couple
+		if char_start in char_starts:
+			char_starts[char_start] += 1
+		else:
+			char_starts[char_start] = 1
+		j += 1
 		if char_couple in char_couplets:
 			char_couplets[char_couple] += 1
 		else:
 			char_couplets[char_couple] = 1
 		i += 1
 	
-		
-print char_couplets
+# Cool, now we can work out the probabilities by looking at 
+# the second letters.  Let's sort the char_couplets
+
+char_couplets_sorted = sorted(char_couplets)
+char_starts_sorted = sorted(char_starts)
+print char_couplets_sorted
+print char_starts
+
+# We can get the probabilities by dividing the number of 
+# couplets by the number of starts
+
+# return (char_couplets_sorted, char_starts_sorted)
+
