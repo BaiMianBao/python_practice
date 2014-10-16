@@ -83,7 +83,7 @@ for word in model1.wordList:
 		# print "DEBUG: start not found" + str(word_starts)
 		
 	if word_end in word_ends:
-		word_ends[word_end] = +1.0
+		word_ends[word_end] += 1.0
 	else:
 		word_ends[word_end] = 1.0
 
@@ -119,6 +119,7 @@ for start in word_starts:
 	print str(start) + " starts a word " + \
     	str("{0:.0f}%".format(word_start_probability*100)) + " of the time"
 
+
 for couplet in sorted(char_couplets):
         couplet_term1 = couplet[:1]                                             
         couplet_term2 = couplet[1:2]
@@ -129,3 +130,9 @@ for couplet in sorted(char_couplets):
 	print couplet_term1 + " is followed by " + couplet_term2 + " " + \
 	str("{0:.0f}%".format(couplet_probability*100)) + " of the time"
 
+for end in word_ends:
+	print "DEBUG: word_ends[end] " + str(word_ends[end])
+	word_end_probability = word_ends[end]/len(model1.wordList) 
+	print str(end) + " ends a word " + \
+    	str("{0:.0f}%".format(word_end_probability*100)) + " of the time"
+	
