@@ -25,13 +25,17 @@ You must implement the methods buildModel and printStats.  If you have time, do 
 """
 
 class Model:
-  def __init__(self, wordList):
-    self.wordList = wordList
+  def __init__(self):
+    self.wordList = ""
     
   def printList(self, wordList):
-    print wordList
+    print "DEBUG:  wordList is " + str(wordList)
 
   def buildModel(self, wordList):
+
+    # pick up the wordList from the invocation
+    self.wordList = wordList
+
     # char_couplets is the dictionary where we'll be storing the 
     # pairs of characters and the number of times they appear.  
     # using this we'll be able to calculate the probability of one
@@ -59,7 +63,7 @@ class Model:
     # It's nicer to do it in the same loop.
 
     for word in model1.wordList:
-      # DEBUG: print word
+      print "DEBUG: word is " + word
       # i = counter for iterating through the word
       i = 0
       word_start = word[:1]
@@ -128,6 +132,15 @@ class Model:
       str("{0:.0f}%".format(word_end_probability*100)) + \
       " of the time"
   
-  model1 = Model(["apple","ape","ample","banana"])
-  print "DEBUG:  model1.wordList: " + str(model1.wordList)
-  buildModel(model1)
+# just instantiate the model
+# I'm confused why git isn't picking up my changes
+model1 = Model()
+
+# build the model here with wordlist
+model1.buildModel(["apple", "ape", "ample","banana"])
+
+# print the word list for debugging
+model1.printList(model1.wordList)
+
+# print out the stats
+model1.printStats(
