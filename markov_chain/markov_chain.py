@@ -27,7 +27,24 @@ You must implement the methods buildModel and printStats.  If you have time, do 
 class Model:
   def __init__(self):
     self.wordList = ""
-    
+    # char_couplets is the dictionary where we'll be storing the 
+    # pairs of characters and the number of times they appear.  
+    # using this we'll be able to calculate the probability of one
+    # char following another.
+    self.char_couplets = {}
+
+    # char_starts is the dict where we keep track of all of the 
+    # letters which are followed by another letter
+    self.char_starts = {}
+
+    # word_starts is the dict where we keep track of all of the 
+    # letters which start words
+    self.word_starts = {}
+
+    # word_ends is the dict where we keep track of all of the 
+    # letters which end words
+    self.word_ends = {}
+
   def printList(self, wordList):
     print "DEBUG:  wordList is " + str(wordList)
 
@@ -35,24 +52,6 @@ class Model:
 
     # pick up the wordList from the invocation
     self.wordList = wordList
-
-    # char_couplets is the dictionary where we'll be storing the 
-    # pairs of characters and the number of times they appear.  
-    # using this we'll be able to calculate the probability of one
-    # char following another.
-    char_couplets = {}
-
-    # char_starts is the dict where we keep track of all of the 
-    # letters which are followed by another letter
-    char_starts = {}
-
-    # word_starts is the dict where we keep track of all of the 
-    # letters which start words
-    word_starts = {}
-
-    # word_ends is the dict where we keep track of all of the 
-    # letters which end words
-    word_ends = {}
 
     # let's iterate through the words and 
     # collect the characters in doubles
@@ -63,58 +62,62 @@ class Model:
     # It's nicer to do it in the same loop.
 
     for word in model1.wordList:
-      print "DEBUG: word is " + word
+      # print "DEBUG: word is " + word
       # i = counter for iterating through the word
       i = 0
       word_start = word[:1]
       word_end = word[-1:]
-      if word_start in word_starts:
-        # print "DEBUG: start found" + str(word_starts)
-        word_starts[word_start] += 1.0
+      if word_start in model1.word_starts:
+        # print "DEBUG: start found" + str(model1.word_starts)
+        model1.word_starts[word_start] += 1.0
       else:
-        word_starts[word_start] = 1.0
-        # print "DEBUG: start not found" + str(word_starts)
+        model1.word_starts[word_start] = 1.0
+        # print "DEBUG: start not found" + str(model1.word_starts)
         
-      if word_end in word_ends:
-        word_ends[word_end] += 1.0
+      if word_end in model1.word_ends:
+        model1.word_ends[word_end] += 1.0
       else:
-        word_ends[word_end] = 1.0
+        model1.word_ends[word_end] = 1.0
 
       while i < (len(word)-1):
         char_start = word[i:i+1]
         char_couple = word[i:i+2]
         # print "DEBUG: " + char_couple
   
-        if char_start in char_starts:
-          char_starts[char_start] += 1.0
+        if char_start in model1.char_starts:
+          model1.char_starts[char_start] += 1.0
         else:
-          char_starts[char_start] = 1.0
-        if char_couple in char_couplets:
-          char_couplets[char_couple] += 1.0
+          model1.char_starts[char_start] = 1.0
+        if char_couple in model1.char_couplets:
+          model1.char_couplets[char_couple] += 1.0
         else:
-          char_couplets[char_couple] = 1.0
+          model1.char_couplets[char_couple] = 1.0
         i += 1
     
-    char_couplets_sorted = sorted(char_couplets)
-    char_starts_sorted = sorted(char_starts)
-    return (char_couplets_sorted, char_starts_sorted)
+    # MAINT:  this used to sort correctly, but now it doesn't.
+    #         Apparently these get turned into lists after being
+    #         sorted and lose their dictionaryness.  :(
+    # model1.char_couplets = sorted(model1.char_couplets)
+    # model1.char_starts = sorted(model1.char_starts)
+    # model1.word_starts = sorted(model1.word_starts)
+    return ()
 
-  def printStats(char_couplets_sorted, char_starts_sorted):
+  def printStats(self, char_couplets, char_starts, word_starts):
     # Cool, now we can work out the probabilities by looking at 
     # the second letters.  
   
-    print "DEBUG: " + str(word_starts)
-    for start in word_starts:
+    # print "DEBUG: " + str(model1.word_starts)
+    for start in model1.word_starts:
       # print "DEBUG: " + start
-      # print "DEBUG: " + str(word_starts[start])
+      # print "DEBUG: " + str(model1.word_starts[start])
       # print "DEBUG: " + str(len(model1.wordList))
-      word_start_probability = word_starts[start]/len(model1.wordList) 
+      word_start_probability = model1.word_starts[start]/len(model1.wordList) 
       # print "DEBUG: word_start_probability = " + str(word_start_probability)
       print str(start) + " starts a word " + \
       str("{0:.0f}%".format(word_start_probability*100)) + \
       " of the time"
 
-    for couplet in sorted(char_couplets):
+    for couplet in model1.char_couplets:
       couplet_term1 = couplet[:1]                                             
       couplet_term2 = couplet[1:2]
       # We can get the probabilities by dividing the number of 
@@ -125,15 +128,14 @@ class Model:
       " " + str("{0:.0f}%".format(couplet_probability*100)) + \
       " of the time"
 
-    for end in word_ends:
-      print "DEBUG: word_ends[end] " + str(word_ends[end])
-      word_end_probability = word_ends[end]/len(model1.wordList) 
+    for end in model1.word_ends:
+      # print "DEBUG: model1.word_ends[end] " + str(model1.word_ends[end])
+      word_end_probability = model1.word_ends[end]/len(model1.wordList) 
       print str(end) + " ends a word " + \
       str("{0:.0f}%".format(word_end_probability*100)) + \
       " of the time"
   
 # just instantiate the model
-# I'm confused why git isn't picking up my changes
 model1 = Model()
 
 # build the model here with wordlist
@@ -143,4 +145,5 @@ model1.buildModel(["apple", "ape", "ample","banana"])
 model1.printList(model1.wordList)
 
 # print out the stats
-model1.printStats(
+model1.printStats(model1.char_couplets, model1.char_starts, model1.word_starts)
+
